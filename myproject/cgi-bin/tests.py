@@ -12,9 +12,9 @@ def test_for_prime_numbers():
     это значит число простое, иначе выводим число
     и выходим из цикла.
     """
-    f = open("SimpleNumbers.txt")
-    simple_numbers = f.read()
-    f.close()
+    simple_numbers = []
+    with open('SimpleNumbers.txt', 'r') as f:
+        simple_numbers = f.read()
     data = []
     data = simple_numbers.split(',')
     for x in data:
@@ -42,7 +42,7 @@ def test_for_even_numbers():
     числом. Если совпали, то идем дальше по циклу, иначе
     вывод чисел и выход из цикла.
     """
-    for x in range(4, 2000, 2):
+    for x in range(4, 4000, 2):
         numb = 1
         tmp = []
         x = int(x)
@@ -72,7 +72,7 @@ def odd_number_test():
     числом. Если совпали, то идем дальше по циклу, иначе
     вывод чисел и выход из цикла.
     """
-    for x in range(5, 2001, 2):
+    for x in range(5, 4001, 2):
         numb = 1
         tmp = []
         x = int(x)
@@ -92,6 +92,6 @@ def odd_number_test():
         print("odd numbered test completed")
 
 
-test_for_prime_numbers()
+# test_for_prime_numbers()
 # test_for_even_numbers()
 # odd_number_test()

@@ -3,8 +3,9 @@
 u"""
 1)!/usr/bin/env python3  2) -*- coding: UTF-8 -*- .
 
-1)Эта строка сообщает cgi-серверу о том,
-что используется язык программирования python >= v3.
+1)Это shebang line. Это строка определяет, где находится
+интерпретатор. удобно для использования в разных системах,
+если интерпретатор расположен в разных местах.
 2)Эта строка для подключения кодировки. В данном случае это UTF-8
 """
 import cgi
@@ -22,9 +23,9 @@ def factorization_even_number(number, storage):
     algorithm_in_cycle - фун-ция, которая применяет множество раз
     алгоритм Ферма для факторизации числа.
     """
-    if number % 2 == 0:
+    if number & 1 == 0:
         storage.append(2)
-        number = int(number / 2)
+        number = int(number) >> 1
         if number == 1:
             return storage
         return factorization_even_number(number, storage)
@@ -51,7 +52,7 @@ def algorithm_Ferma(testing_number):
         return [x, x]
     while True:
         x += 1
-        temp = (testing_number + 1) / 2
+        temp = (testing_number + 1) >> 1
         if x == temp:
             return False
         else:
@@ -80,7 +81,7 @@ def Cycle(test_numb, information_storage):
     else:
         for numb in numbs:
             tmp_list.append(numb)
-    if tmp_list == []:
+    if not tmp_list:
         return information_storage
     return algorithm_in_cycle(tmp_list, information_storage)
 
@@ -102,7 +103,7 @@ def algorithm_in_cycle(numbers, storage):
     return tmp
 
 
-def output_page(file_name, flag, number):
+def output_page(file_name, number, flag=None):
     u"""
     output_page - функция для вывода html страниц с факторизованным числом.
 
@@ -113,14 +114,13 @@ def output_page(file_name, flag, number):
     простых множителей факторизованного числа.
     number - Изначальное число, что ввел пользователь.
     """
-    f = open(file_name)
-    from_file = f.read()
-    f.close()
-    print("Content-type: text/html\n")
-    if flag is None:
-        print(from_file.format(number))
-    else:
-        print(from_file.format(number, flag))
+    with open(file_name, 'r') as f:
+        from_file = f.read()
+        print("Content-type: text/html\n")
+        if flag is None:
+            print(from_file.format(number))
+        else:
+            print(from_file.format(number, flag))
 
 
 if __name__ == "__main__":
@@ -132,13 +132,13 @@ if __name__ == "__main__":
         user_number = int(html.escape(user_number))
         if user_number % 2 == 0:
             answ = factorization_even_number(user_number, info_storage)
-            output_page("page2.html", answ, user_number)
+            output_page("page2.html", user_number, answ)
         else:
             answ = algorithm_Ferma(user_number)
             if answ is False:
-                output_page("page1.html", None, user_number)
+                output_page("page1.html", user_number)
             else:
                 answ = algorithm_in_cycle(answ, info_storage)
-                output_page("page3.html", answ, user_number)
+                output_page("page3.html", user_number, answ)
     except ValueError:
-        output_page("ErrorPage.html", None, user_number)
+        output_page("ErrorPage.html", user_number)
